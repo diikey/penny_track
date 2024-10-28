@@ -18,6 +18,14 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int currentIndex = 0;
+  final List<String> titles = [
+    "Records",
+    "Analysis",
+    "Budgets",
+    "Reports",
+    "Categories",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
@@ -36,14 +44,28 @@ class _AppState extends State<App> {
           })
         ],
         child: Scaffold(
-          appBar: AppBar(),
-          body: <Widget>[
-            const RecordsScreen(),
-            const AnalysisScreen(),
-            const BudgetsScreen(),
-            const AccountsScreen(),
-            const CategoriesScreen(),
-          ][currentIndex],
+          appBar: AppBar(
+            title: Text(titles[currentIndex]),
+            centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  //todo go to search page
+                },
+                icon: Icon(Icons.search),
+              ),
+            ],
+          ),
+          body: IndexedStack(
+            index: currentIndex,
+            children: <Widget>[
+              const RecordsScreen(),
+              const AnalysisScreen(),
+              const BudgetsScreen(),
+              const AccountsScreen(),
+              const CategoriesScreen(),
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             shape: const CircleBorder(),

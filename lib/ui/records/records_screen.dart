@@ -18,8 +18,57 @@ class _RecordsScreenState extends State<RecordsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Home Screen'),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.chevron_left),
+              ),
+            ),
+            Text("October, 2024"),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.chevron_right),
+              ),
+            ),
+          ],
+        ),
+        BlocBuilder<RecordsBloc, RecordsState>(
+          builder: (context, state) {
+            if (state is RecordsLoadingLocal) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is RecordsSuccessLocal) {
+              if (state.records.isNotEmpty) {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: state.records.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text("qweqweqwe"),
+                      );
+                    },
+                  ),
+                );
+              }
+            }
+            return Expanded(
+              child: Center(
+                child: Text("No Records."),
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 }

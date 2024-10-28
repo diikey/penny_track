@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:penny_track/ui/app/app.dart';
+import 'package:penny_track/utils/resources/routes_manager.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const App(),
+      onGenerateRoute: RoutesGenerator.getRoute,
+      initialRoute: Routes.splashRoute,
     );
   }
 }
