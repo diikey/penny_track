@@ -8,6 +8,7 @@ import 'package:penny_track/ui/budgets/budgets_screen.dart';
 import 'package:penny_track/ui/categories/categories_screen.dart';
 import 'package:penny_track/ui/records/records_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/utils/resources/routes_manager.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -67,7 +68,9 @@ class _AppState extends State<App> {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.manageRecordRoute);
+            },
             shape: const CircleBorder(),
             child: const Icon(Icons.add),
           ),
