@@ -13,10 +13,10 @@ String loginResponseToJson(Record data) => json.encode(data.toJson());
 class Record extends Equatable {
   final String id;
   final String recordAccount;
-  final int recordAmount;
+  final double recordAmount;
   final String recordCreatedAt;
   final String recordNotes;
-  final String recordTypes;
+  final String recordType;
 
   const Record({
     required this.id,
@@ -24,7 +24,7 @@ class Record extends Equatable {
     required this.recordAmount,
     required this.recordCreatedAt,
     required this.recordNotes,
-    required this.recordTypes,
+    required this.recordType,
   });
 
   @override
@@ -34,16 +34,16 @@ class Record extends Equatable {
         recordAmount,
         recordCreatedAt,
         recordNotes,
-        recordTypes
+        recordType
       ];
 
   Record copyWith({
     String? id,
     String? recordAccount,
-    int? recordAmount,
+    double? recordAmount,
     String? recordCreatedAt,
     String? recordNotes,
-    String? recordTypes,
+    String? recordType,
   }) =>
       Record(
         id: id ?? this.id,
@@ -51,16 +51,16 @@ class Record extends Equatable {
         recordAmount: recordAmount ?? this.recordAmount,
         recordCreatedAt: recordCreatedAt ?? this.recordCreatedAt,
         recordNotes: recordNotes ?? this.recordNotes,
-        recordTypes: recordTypes ?? this.recordTypes,
+        recordType: recordType ?? this.recordType,
       );
 
   factory Record.fromJson(Map<String, dynamic> json) => Record(
         id: json["_id"],
         recordAccount: json["record_account"],
-        recordAmount: json["record_amount"],
+        recordAmount: double.parse(json["record_amount"]),
         recordCreatedAt: json["record_created_at"],
         recordNotes: json["record_notes"],
-        recordTypes: json["record_types"],
+        recordType: json["record_type"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +69,6 @@ class Record extends Equatable {
         "record_amount": recordAmount,
         "record_created_at": recordCreatedAt,
         "record_notes": recordNotes,
-        "record_types": recordTypes,
+        "record_type": recordType,
       };
 }

@@ -24,3 +24,8 @@ final class RecordsFailedLocal extends RecordsState {
   final String errorMessage;
   const RecordsFailedLocal(this.errorMessage);
 }
+
+///for add states
+final class RecordsSuccessAdd extends RecordsState {
+  const RecordsSuccessAdd();
+}

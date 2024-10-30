@@ -10,4 +10,9 @@ class LocalData implements LocalDataSource {
   Future<List<Record>> getRecords() async {
     return await _dbhelper.getRecords();
   }
+
+  @override
+  Future<int> addRecord({required Record record}) async {
+    return await _dbhelper.addRecord(record);
+  }
 }

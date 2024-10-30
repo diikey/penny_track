@@ -11,4 +11,9 @@ class RecordsRepository implements RecordsRepositorySource {
   Future<List<Record>> getRecords() async {
     return _localData.getRecords();
   }
+
+  @override
+  Future<int> addRecord({required Record record}) {
+    return _localData.addRecord(record: record);
+  }
 }

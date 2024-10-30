@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:penny_track/bloc/records/records_bloc.dart';
+import 'package:penny_track/data/dto/records/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/utils/general_utils.dart';
 
 class RecordsScreen extends StatefulWidget {
   const RecordsScreen({super.key});
@@ -53,8 +55,27 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   child: ListView.builder(
                     itemCount: state.records.length,
                     itemBuilder: (context, index) {
+                      final Record record = state.records[index];
                       return ListTile(
-                        title: Text("qweqweqwe"),
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[400],
+                          ),
+                          child: Icon(
+                            record.recordType.toLowerCase() == "income"
+                                ? Icons.arrow_upward
+                                : Icons.arrow_downward,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(GeneralUtils.convertDateString(
+                            input: record.recordCreatedAt)),
+                        subtitle: Text(record.recordNotes),
+                        trailing: Text(GeneralUtils.convertDoubleToMoney(
+                            amount: record.recordAmount)),
                       );
                     },
                   ),

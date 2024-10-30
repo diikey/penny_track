@@ -10,3 +10,8 @@ sealed class RecordsEvent extends Equatable {
 class RecordsInitialGetEvent extends RecordsEvent {
   const RecordsInitialGetEvent();
 }
+
+class RecordsAddEvent extends RecordsEvent {
+  final Record record;
+  const RecordsAddEvent(this.record);
+}

@@ -40,9 +40,11 @@ dependencies:
   equatable:
   flutter_bloc:
   http:
+  intl:
   path:
   path_provider:
   sqflite:
+  uuid:
 
 dev_dependencies:
   flutter_test:
