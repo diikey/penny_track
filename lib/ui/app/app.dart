@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:penny_track/bloc/accounts/accounts_bloc.dart';
 import 'package:penny_track/bloc/records/records_bloc.dart';
 import 'package:penny_track/data/local/local_data.dart';
+import 'package:penny_track/data/repositories/accounts/accounts_repository.dart';
 import 'package:penny_track/data/repositories/records/records_repository.dart';
 import 'package:penny_track/ui/accounts/accounts_screen.dart';
 import 'package:penny_track/ui/analysis/analysis_screen.dart';
@@ -23,7 +25,7 @@ class _AppState extends State<App> {
     "Records",
     "Analysis",
     "Budgets",
-    "Reports",
+    "Accounts",
     "Categories",
   ];
 
@@ -37,12 +39,17 @@ class _AppState extends State<App> {
         RepositoryProvider<RecordsRepository>(create: (context) {
           return RecordsRepository(context.read<LocalData>());
         }),
+        RepositoryProvider<AccountsRepository>(
+            create: (context) => AccountsRepository(context.read<LocalData>()))
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) {
             return RecordsBloc(context.read<RecordsRepository>());
-          })
+          }),
+          BlocProvider(
+              create: (context) =>
+                  AccountsBloc(context.read<AccountsRepository>()))
         ],
         child: Scaffold(
           appBar: AppBar(
@@ -82,27 +89,27 @@ class _AppState extends State<App> {
                 });
               },
               selectedIndex: currentIndex,
-              destinations: const [
+              destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.list_alt),
-                  label: 'Records',
+                  icon: const Icon(Icons.list_alt),
+                  label: titles[0],
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.bar_chart),
-                  label: 'Analysis',
+                  icon: const Icon(Icons.bar_chart),
+                  label: titles[1],
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.attach_money),
-                  label: 'Budgets',
+                  label: titles[2],
                 ),
                 // Text(''), // use this when centering the floating action button
                 NavigationDestination(
-                  icon: Icon(Icons.account_balance_wallet),
-                  label: 'Reports',
+                  icon: const Icon(Icons.account_balance_wallet),
+                  label: titles[3],
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.category),
-                  label: 'Categories',
+                  icon: const Icon(Icons.category),
+                  label: titles[4],
                 ),
               ]),
         ),

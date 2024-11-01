@@ -9,11 +9,11 @@ class RecordsRepository implements RecordsRepositorySource {
 
   @override
   Future<List<Record>> getRecords() async {
-    return _localData.getRecords();
+    return await _localData.getRecords();
   }
 
   @override
-  Future<int> addRecord({required Record record}) {
-    return _localData.addRecord(record: record);
+  Future<int> addRecord({required Record record}) async {
+    return await _localData.addRecord(record: record);
   }
 }

@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 
+enum Crud { create, read, update, delete }
+
 class GeneralUtils {
   ///convert string date to MMM dd, yyyy format
   static String convertDateString({required String input}) {

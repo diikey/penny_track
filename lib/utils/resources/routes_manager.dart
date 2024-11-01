@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:penny_track/data/dto/accounts/account.dart';
+import 'package:penny_track/ui/accounts/manage_account_screen.dart';
 import 'package:penny_track/ui/app/app.dart';
 import 'package:penny_track/ui/records/manage_record_screen.dart';
 import 'package:penny_track/ui/splash/splash_screen.dart';
@@ -8,6 +10,7 @@ class Routes {
   static const String splashRoute = "/";
   static const String appRoute = "/app";
   static const String manageRecordRoute = "/manage_record";
+  static const String manageAccountRoute = "/manage_account";
 }
 
 class RoutesGenerator {
@@ -22,6 +25,12 @@ class RoutesGenerator {
         return MaterialPageRoute(
             builder: (_) => ManageRecordScreen(
                   record: record,
+                ));
+      case Routes.manageAccountRoute:
+        final Account? account = routeSettings.arguments as Account?;
+        return MaterialPageRoute(
+            builder: (_) => ManageAccountScreen(
+                  account: account,
                 ));
       default:
         return unDefinedRoute();

@@ -10,35 +10,35 @@ String accountToJson(Account data) => json.encode(data.toJson());
 
 class Account {
   final String id;
-  final int accountInitialAmount;
+  final double accountAmount;
   final String accountName;
 
   Account({
     required this.id,
-    required this.accountInitialAmount,
+    required this.accountAmount,
     required this.accountName,
   });
 
   Account copyWith({
     String? id,
-    int? accountInitialAmount,
+    double? accountAmount,
     String? accountName,
   }) =>
       Account(
         id: id ?? this.id,
-        accountInitialAmount: accountInitialAmount ?? this.accountInitialAmount,
+        accountAmount: accountAmount ?? this.accountAmount,
         accountName: accountName ?? this.accountName,
       );
 
   factory Account.fromJson(Map<String, dynamic> json) => Account(
         id: json["_id"],
-        accountInitialAmount: json["account_initial_amount"],
+        accountAmount: double.parse(json["account_amount"]),
         accountName: json["account_name"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "account_initial_amount": accountInitialAmount,
+        "account_amount": accountAmount,
         "account_name": accountName,
       };
 }
