@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/data/local/local_data.dart';
+import 'package:penny_track/data/repositories/accounts/accounts_repository.dart';
+import 'package:penny_track/data/repositories/records/records_repository.dart';
 import 'package:penny_track/utils/resources/routes_manager.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiRepositoryProvider(providers: [
+    RepositoryProvider<LocalData>(create: (context) => LocalData()),
+    RepositoryProvider<RecordsRepository>(
+        create: (context) => RecordsRepository(context.read<LocalData>())),
+    RepositoryProvider<AccountsRepository>(
+        create: (context) => AccountsRepository(context.read<LocalData>()))
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

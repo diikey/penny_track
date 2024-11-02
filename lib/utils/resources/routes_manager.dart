@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/bloc/accounts/accounts_bloc.dart';
+import 'package:penny_track/bloc/records/records_bloc.dart';
 import 'package:penny_track/data/dto/accounts/account.dart';
+import 'package:penny_track/data/repositories/accounts/accounts_repository.dart';
+import 'package:penny_track/data/repositories/records/records_repository.dart';
 import 'package:penny_track/ui/accounts/manage_account_screen.dart';
 import 'package:penny_track/ui/app/app.dart';
 import 'package:penny_track/ui/records/manage_record_screen.dart';
@@ -19,19 +24,42 @@ class RoutesGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case Routes.appRoute:
-        return MaterialPageRoute(builder: (_) => App());
+        return MaterialPageRoute(builder: (_) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    RecordsBloc(context.read<RecordsRepository>()),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    AccountsBloc(context.read<AccountsRepository>()),
+              ),
+            ],
+            child: App(),
+          );
+        });
       case Routes.manageRecordRoute:
         final Record? record = routeSettings.arguments as Record?;
-        return MaterialPageRoute(
-            builder: (_) => ManageRecordScreen(
-                  record: record,
-                ));
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider(
+            create: (context) => RecordsBloc(context.read<RecordsRepository>()),
+            child: ManageRecordScreen(
+              record: record,
+            ),
+          );
+        });
       case Routes.manageAccountRoute:
         final Account? account = routeSettings.arguments as Account?;
-        return MaterialPageRoute(
-            builder: (_) => ManageAccountScreen(
-                  account: account,
-                ));
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider(
+            create: (context) =>
+                AccountsBloc(context.read<AccountsRepository>()),
+            child: ManageAccountScreen(
+              account: account,
+            ),
+          );
+        });
       default:
         return unDefinedRoute();
     }
