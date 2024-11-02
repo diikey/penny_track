@@ -44,7 +44,7 @@ class _ChooseAccountModalState extends State<ChooseAccountModal> {
                         return ListTile(
                           onTap: () {
                             //select an account
-                            Navigator.pop(context, account);
+                            Navigator.pop(context, account.accountName);
                           },
                           title: Text(account.accountName),
                           trailing: Text(GeneralUtils.convertDoubleToMoney(

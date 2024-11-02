@@ -13,6 +13,7 @@ String loginResponseToJson(Record data) => json.encode(data.toJson());
 class Record extends Equatable {
   final String id;
   final String recordAccount;
+  final String? recordAccountTransfer;
   final double recordAmount;
   final String recordCreatedAt;
   final String recordNotes;
@@ -21,6 +22,7 @@ class Record extends Equatable {
   const Record({
     required this.id,
     required this.recordAccount,
+    this.recordAccountTransfer,
     required this.recordAmount,
     required this.recordCreatedAt,
     required this.recordNotes,
@@ -31,6 +33,7 @@ class Record extends Equatable {
   List<Object?> get props => [
         id,
         recordAccount,
+        recordAccountTransfer,
         recordAmount,
         recordCreatedAt,
         recordNotes,
@@ -40,6 +43,7 @@ class Record extends Equatable {
   Record copyWith({
     String? id,
     String? recordAccount,
+    String? recordAccountTransfer,
     double? recordAmount,
     String? recordCreatedAt,
     String? recordNotes,
@@ -48,6 +52,8 @@ class Record extends Equatable {
       Record(
         id: id ?? this.id,
         recordAccount: recordAccount ?? this.recordAccount,
+        recordAccountTransfer:
+            recordAccountTransfer ?? this.recordAccountTransfer,
         recordAmount: recordAmount ?? this.recordAmount,
         recordCreatedAt: recordCreatedAt ?? this.recordCreatedAt,
         recordNotes: recordNotes ?? this.recordNotes,
@@ -57,6 +63,7 @@ class Record extends Equatable {
   factory Record.fromJson(Map<String, dynamic> json) => Record(
         id: json["_id"],
         recordAccount: json["record_account"],
+        recordAccountTransfer: json["record_account_transfer"],
         recordAmount: double.parse(json["record_amount"]),
         recordCreatedAt: json["record_created_at"],
         recordNotes: json["record_notes"],
@@ -66,6 +73,7 @@ class Record extends Equatable {
   Map<String, dynamic> toJson() => {
         "_id": id,
         "record_account": recordAccount,
+        "record_account_transfer": recordAccountTransfer,
         "record_amount": recordAmount,
         "record_created_at": recordCreatedAt,
         "record_notes": recordNotes,

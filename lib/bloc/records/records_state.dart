@@ -26,6 +26,6 @@ final class RecordsFailedLocal extends RecordsState {
 }
 
 ///for add states
-final class RecordsSuccessAdd extends RecordsState {
-  const RecordsSuccessAdd();
+final class RecordsSuccessManage extends RecordsState {
+  const RecordsSuccessManage();
 }

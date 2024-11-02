@@ -11,7 +11,8 @@ class RecordsInitialGetEvent extends RecordsEvent {
   const RecordsInitialGetEvent();
 }
 
-class RecordsAddEvent extends RecordsEvent {
+class RecordsManageEvent extends RecordsEvent {
   final Record record;
-  const RecordsAddEvent(this.record);
+  final Crud flag;
+  const RecordsManageEvent(this.record, this.flag);
 }

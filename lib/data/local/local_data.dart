@@ -15,8 +15,17 @@ class LocalData implements LocalDataSource {
   }
 
   @override
-  Future<int> addRecord({required Record record}) async {
-    return await _dbhelper.addRecord(record);
+  Future<int> manageRecord({required Record record, required Crud flag}) async {
+    switch (flag) {
+      case Crud.create:
+        return await _dbhelper.addRecord(record);
+      case Crud.update:
+        return await _dbhelper.updateRecord(record);
+      case Crud.delete:
+        return await _dbhelper.deleteRecord(record);
+      default:
+        return -1;
+    }
   }
 
   ///accounts

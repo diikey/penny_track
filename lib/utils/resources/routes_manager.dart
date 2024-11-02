@@ -8,6 +8,7 @@ import 'package:penny_track/data/repositories/records/records_repository.dart';
 import 'package:penny_track/ui/accounts/manage_account_screen.dart';
 import 'package:penny_track/ui/app/app.dart';
 import 'package:penny_track/ui/records/manage_record_screen.dart';
+import 'package:penny_track/ui/records/record_details_screen.dart';
 import 'package:penny_track/ui/splash/splash_screen.dart';
 import 'package:penny_track/data/dto/records/record.dart';
 
@@ -15,6 +16,7 @@ class Routes {
   static const String splashRoute = "/";
   static const String appRoute = "/app";
   static const String manageRecordRoute = "/manage_record";
+  static const String recordDetailsRoute = "/record_details";
   static const String manageAccountRoute = "/manage_account";
 }
 
@@ -41,12 +43,20 @@ class RoutesGenerator {
         });
       case Routes.manageRecordRoute:
         final Record? record = routeSettings.arguments as Record?;
-        return MaterialPageRoute(builder: (_) {
+        return MaterialPageRoute<String>(builder: (_) {
           return BlocProvider(
             create: (context) => RecordsBloc(context.read<RecordsRepository>()),
             child: ManageRecordScreen(
               record: record,
             ),
+          );
+        });
+      case Routes.recordDetailsRoute:
+        final Record record = routeSettings.arguments as Record;
+        return MaterialPageRoute<String>(builder: (_) {
+          return BlocProvider<RecordsBloc>(
+            create: (context) => RecordsBloc(context.read<RecordsRepository>()),
+            child: RecordDetailsScreen(record: record),
           );
         });
       case Routes.manageAccountRoute:

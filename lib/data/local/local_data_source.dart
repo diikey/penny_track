@@ -6,7 +6,7 @@ abstract class LocalDataSource {
   ///records
   Future<List<Record>> getRecords();
 
-  Future<int> addRecord({required Record record});
+  Future<int> manageRecord({required Record record, required Crud flag});
 
   ///accounts
   Future<List<Account>> getAccounts();

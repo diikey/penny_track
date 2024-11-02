@@ -3,6 +3,7 @@ import 'package:penny_track/bloc/records/records_bloc.dart';
 import 'package:penny_track/data/dto/records/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:penny_track/utils/general_utils.dart';
+import 'package:penny_track/utils/resources/routes_manager.dart';
 
 class RecordsScreen extends StatefulWidget {
   const RecordsScreen({super.key});
@@ -57,6 +58,20 @@ class _RecordsScreenState extends State<RecordsScreen> {
                     itemBuilder: (context, index) {
                       final Record record = state.records[index];
                       return ListTile(
+                        onTap: () async {
+                          final String? result = await Navigator.pushNamed(
+                            context,
+                            Routes.recordDetailsRoute,
+                            arguments: record,
+                          );
+
+                          if (!context.mounted || result == null) return;
+                          if (result == "success") {
+                            context
+                                .read<RecordsBloc>()
+                                .add(RecordsInitialGetEvent());
+                          }
+                        },
                         leading: Container(
                           width: 50,
                           height: 50,
@@ -67,15 +82,32 @@ class _RecordsScreenState extends State<RecordsScreen> {
                           child: Icon(
                             record.recordType.toLowerCase() == "income"
                                 ? Icons.arrow_upward
-                                : Icons.arrow_downward,
+                                : record.recordType.toLowerCase() == "expense"
+                                    ? Icons.arrow_downward
+                                    : Icons.swap_vert,
                             color: Colors.white,
                           ),
                         ),
                         title: Text(GeneralUtils.convertDateString(
                             input: record.recordCreatedAt)),
-                        subtitle: Text(record.recordNotes),
-                        trailing: Text(GeneralUtils.convertDoubleToMoney(
-                            amount: record.recordAmount)),
+                        subtitle: Text(
+                          record.recordType == "transfer"
+                              ? "${record.recordAccount} > ${record.recordAccountTransfer}"
+                              : "${record.recordAccount}${record.recordNotes == "" ? "" : " - ${record.recordNotes}"}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Text(
+                          GeneralUtils.convertDoubleToMoney(
+                              amount: record.recordAmount),
+                          style: TextStyle(
+                            color: record.recordType == "income"
+                                ? Colors.green
+                                : record.recordType == "expense"
+                                    ? Colors.red
+                                    : Colors.orange,
+                          ),
+                        ),
                       );
                     },
                   ),

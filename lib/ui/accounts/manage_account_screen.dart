@@ -29,9 +29,7 @@ class _ManageAccountScreenState extends State<ManageAccountScreen> {
     return BlocListener<AccountsBloc, AccountsState>(
       listener: (context, state) {
         if (state is AccountsFailed) {
-          ScaffoldMessenger.of(context)
-            ..removeCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(state.errorMessage)));
+          GeneralUtils.showSnackBar(context, state.errorMessage);
         }
         if (state is AccountsSuccessManage) {
           Navigator.pop(context, "success");

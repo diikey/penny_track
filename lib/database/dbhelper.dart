@@ -19,6 +19,7 @@ class DBHelper {
   static const recordsTable = 'records';
 
   static const columnRecordAccount = 'record_account';
+  static const columnRecordAccountTransfer = 'record_account_transfer';
   static const columnRecordAmount = 'record_amount';
   static const columnRecordCreatedAt = 'record_created_at';
   static const columnRecordNotes = 'record_notes';
@@ -27,8 +28,6 @@ class DBHelper {
   ///Accounts Table
   static const accountsTable = 'accounts';
 
-  // static const columnAccountCurrentAmount = 'account_current_amount';
-  // static const columnAccountInitialAmount = 'account_initial_amount';
   static const columnAccountAmount = 'account_amount';
   static const columnAccountName = 'account_name';
 
@@ -64,6 +63,7 @@ class DBHelper {
           CREATE TABLE $recordsTable (
             $columnId TEXT PRIMARY KEY,
             $columnRecordAccount TEXT NOT NULL,
+            $columnRecordAccountTransfer TEXT,
             $columnRecordAmount TEXT NOT NULL,
             $columnRecordCreatedAt TEXT NOT NULL,
             $columnRecordNotes TEXT NOT NULL,
@@ -207,8 +207,9 @@ class DBHelper {
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
-  Future<int> deleteRecord(String id) async {
+  Future<int> deleteRecord(Record record) async {
     Database db = await instance.database;
+    String id = record.id;
     return await db
         .delete(recordsTable, where: '$columnId = ?', whereArgs: [id]);
   }
