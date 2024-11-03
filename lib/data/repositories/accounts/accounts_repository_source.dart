@@ -3,6 +3,6 @@ import 'package:penny_track/utils/general_utils.dart';
 
 abstract class AccountsRepositorySource {
   Future<List<Account>> getAccounts();
-
+  Future<List<Account>> getCalculatedAccounts();
   Future<int> manageAccount({required Account account, required Crud flag});
 }

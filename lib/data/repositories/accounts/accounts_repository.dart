@@ -14,7 +14,13 @@ class AccountsRepository implements AccountsRepositorySource {
   }
 
   @override
-  Future<int> manageAccount({required Account account, required Crud flag}) async {
+  Future<List<Account>> getCalculatedAccounts() async {
+    return await _localData.getCalculatedAccounts();
+  }
+
+  @override
+  Future<int> manageAccount(
+      {required Account account, required Crud flag}) async {
     return await _localData.manageAccount(account: account, flag: flag);
   }
 }

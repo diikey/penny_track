@@ -35,6 +35,11 @@ class LocalData implements LocalDataSource {
   }
 
   @override
+  Future<List<Account>> getCalculatedAccounts() async {
+    return await _dbhelper.getCalculatedAccounts();
+  }
+
+  @override
   Future<int> manageAccount(
       {required Account account, required Crud flag}) async {
     switch (flag) {

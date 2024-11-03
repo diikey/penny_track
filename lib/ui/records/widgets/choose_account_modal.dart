@@ -14,7 +14,7 @@ class ChooseAccountModal extends StatefulWidget {
 class _ChooseAccountModalState extends State<ChooseAccountModal> {
   @override
   void initState() {
-    context.read<AccountsBloc>().add(AccountsGetEvent());
+    context.read<AccountsBloc>().add(AccountsGetCalculatedEvent());
     super.initState();
   }
 
@@ -48,7 +48,7 @@ class _ChooseAccountModalState extends State<ChooseAccountModal> {
                           },
                           title: Text(account.accountName),
                           trailing: Text(GeneralUtils.convertDoubleToMoney(
-                              amount: account.accountAmount)),
+                              amount: account.accountCurrentAmount!)),
                           contentPadding: EdgeInsets.all(10),
                         );
                       },

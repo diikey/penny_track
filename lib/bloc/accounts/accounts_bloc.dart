@@ -13,6 +13,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
 
   AccountsBloc(this.accountsRepository) : super(AccountsInitial()) {
     on<AccountsGetEvent>(_onAccountsGetEvent);
+    on<AccountsGetCalculatedEvent>(_onAccountsGetCalculatedEvent);
     on<AccountsManageEvent>(_onAccountsManageEvent);
   }
 
@@ -21,6 +22,18 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     emit(AccountsLoading());
     try {
       final List<Account> accounts = await accountsRepository.getAccounts();
+      emit(AccountsSuccess(accounts));
+    } catch (e) {
+      emit(AccountsFailed("failed to get accounts"));
+    }
+  }
+
+  void _onAccountsGetCalculatedEvent(
+      AccountsGetCalculatedEvent event, Emitter<AccountsState> emit) async {
+    emit(AccountsLoading());
+    try {
+      final List<Account> accounts =
+          await accountsRepository.getCalculatedAccounts();
       emit(AccountsSuccess(accounts));
     } catch (e) {
       emit(AccountsFailed("failed to get accounts"));

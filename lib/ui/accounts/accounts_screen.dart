@@ -15,7 +15,7 @@ class AccountsScreen extends StatefulWidget {
 class _AccountsScreenState extends State<AccountsScreen> {
   @override
   void initState() {
-    context.read<AccountsBloc>().add(AccountsGetEvent());
+    context.read<AccountsBloc>().add(AccountsGetCalculatedEvent());
     super.initState();
   }
 
@@ -51,7 +51,8 @@ class _AccountsScreenState extends State<AccountsScreen> {
               if (state is AccountsSuccess)
                 if (state.accounts.isNotEmpty)
                   Expanded(
-                    child: ListView.builder(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => Divider(),
                       itemCount: state.accounts.length,
                       itemBuilder: (context, index) {
                         final account = state.accounts[index];
@@ -60,11 +61,20 @@ class _AccountsScreenState extends State<AccountsScreen> {
                             _navigateToManageAccount(
                                 context: context, account: account);
                           },
-                          tileColor:
-                              index % 2 == 0 ? Colors.grey : Colors.white,
                           title: Text(account.accountName),
-                          trailing: Text(GeneralUtils.convertDoubleToMoney(
-                              amount: account.accountAmount)),
+                          subtitle: Text(
+                            "inital amount: ${GeneralUtils.convertDoubleToMoney(amount: account.accountAmount)}",
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                          trailing: Text(
+                            GeneralUtils.convertDoubleToMoney(
+                                amount: account.accountCurrentAmount!),
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -92,7 +102,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
     double totalAmount = 0.0;
 
     for (final element in accounts) {
-      totalAmount += element.accountAmount;
+      totalAmount += element.accountCurrentAmount!;
     }
 
     return GeneralUtils.convertDoubleToMoney(amount: totalAmount);
@@ -108,7 +118,7 @@ class _AccountsScreenState extends State<AccountsScreen> {
 
     if (!context.mounted || result == null) return;
     if (result == "success") {
-      context.read<AccountsBloc>().add(AccountsGetEvent());
+      context.read<AccountsBloc>().add(AccountsGetCalculatedEvent());
     }
   }
 }

@@ -96,6 +96,9 @@ class _RecordsScreenState extends State<RecordsScreen> {
                               : "${record.recordAccount}${record.recordNotes == "" ? "" : " - ${record.recordNotes}"}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                          ),
                         ),
                         trailing: Text(
                           GeneralUtils.convertDoubleToMoney(

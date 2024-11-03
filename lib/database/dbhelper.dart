@@ -138,7 +138,7 @@ class DBHelper {
     Database db = await instance.database;
     return await db.insert(
       accountsTable,
-      row.toJson(),
+      row.insertToJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -161,6 +161,34 @@ class DBHelper {
   Future<List<Account>> getAccounts() async {
     Database db = await instance.database;
     final List<Map<String, dynamic>> result = await db.query(accountsTable);
+
+    //Convert the list of maps into Records
+    return List.generate(
+      result.length,
+      (i) => Account.fromJson(result[i]),
+    );
+  }
+
+  Future<List<Account>> getCalculatedAccounts() async {
+    Database db = await instance.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT 
+        a.*,
+        a.account_amount + 
+        COALESCE(SUM(CASE 
+          WHEN r.record_type = 'income' THEN r.record_amount
+          WHEN r.record_type = 'expense' THEN -r.record_amount
+          WHEN r.record_type = 'transfer' AND r.record_account = a.account_name THEN -r.record_amount
+          WHEN r.record_type = 'transfer' AND r.record_account_transfer = a.account_name THEN r.record_amount
+          ELSE 0
+        END), 0) AS account_current_amount
+      FROM 
+        accounts a
+      LEFT JOIN 
+        records r ON r.record_account = a.account_name OR r.record_account_transfer = a.account_name
+      GROUP BY 
+        a.account_name, a.account_amount;
+      ''');
 
     //Convert the list of maps into Records
     return List.generate(
@@ -197,7 +225,7 @@ class DBHelper {
     String id = row.id;
     return await db.update(
       accountsTable,
-      row.toJson(),
+      row.insertToJson(),
       where: '$columnId = ?',
       whereArgs: [id],
     );

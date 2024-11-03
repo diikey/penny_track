@@ -11,6 +11,10 @@ final class AccountsGetEvent extends AccountsEvent {
   const AccountsGetEvent();
 }
 
+final class AccountsGetCalculatedEvent extends AccountsEvent {
+  const AccountsGetCalculatedEvent();
+}
+
 final class AccountsManageEvent extends AccountsEvent {
   final Account account;
   final Crud flag;

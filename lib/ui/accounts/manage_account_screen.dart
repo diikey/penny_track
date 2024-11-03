@@ -84,7 +84,7 @@ class _ManageAccountScreenState extends State<ManageAccountScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(bottom: 5),
-                child: Text("Set Amount"),
+                child: Text("Set Initial Amount"),
               ),
               TextFormField(
                 controller: amountController,
