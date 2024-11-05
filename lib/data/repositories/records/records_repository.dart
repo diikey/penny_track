@@ -14,6 +14,11 @@ class RecordsRepository implements RecordsRepositorySource {
   }
 
   @override
+  Future<List<Record>> getRecordsByDate({required String date}) async {
+    return await _localData.getRecordsByDate(date: date);
+  }
+
+  @override
   Future<int> manageRecord({required Record record, required Crud flag}) async {
     return await _localData.manageRecord(record: record, flag: flag);
   }

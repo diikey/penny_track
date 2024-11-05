@@ -57,7 +57,7 @@ class _AppState extends State<App> {
                   as String?;
 
           if (!context.mounted || result == null) return;
-          context.read<RecordsBloc>().add(RecordsInitialGetEvent());
+          context.read<RecordsBloc>().add(RecordsSetManageStateSuccess());
         },
         shape: const CircleBorder(),
         child: const Icon(Icons.add),

@@ -12,13 +12,15 @@ class RecordsBloc extends Bloc<RecordsEvent, RecordsState> {
   RecordsBloc(this.recordsRepository) : super(RecordsInitial()) {
     on<RecordsInitialGetEvent>(_onRecordsInitialGetEvent);
     on<RecordsManageEvent>(_onRecordsManageEvent);
+    on<RecordsSetManageStateSuccess>(_onRecordsSetManageStateSuccess);
   }
 
   void _onRecordsInitialGetEvent(
       RecordsInitialGetEvent event, Emitter<RecordsState> emit) async {
     emit(RecordsLoadingLocal());
     try {
-      final List<Record> records = await recordsRepository.getRecords();
+      final List<Record> records =
+          await recordsRepository.getRecordsByDate(date: event.dateQuery);
       emit(RecordsSuccessLocal(records));
     } catch (e) {
       emit(RecordsFailedLocal(e.toString()));
@@ -40,6 +42,11 @@ class RecordsBloc extends Bloc<RecordsEvent, RecordsState> {
     } catch (e) {
       emit(RecordsFailedLocal("Failed to manage record"));
     }
+  }
+
+  void _onRecordsSetManageStateSuccess(
+      RecordsSetManageStateSuccess event, Emitter<RecordsState> emit) {
+    emit(RecordsSuccessManage());
   }
 
   @override

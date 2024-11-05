@@ -282,7 +282,8 @@ class _ManageRecordScreenState extends State<ManageRecordScreen> {
                                   recordAmount:
                                       double.parse(amountController.text),
                                   recordCreatedAt: GeneralUtils.convertDateTime(
-                                      dateTime: DateTime.now()),
+                                      dateTime: DateTime.now(),
+                                      format: "yyyy-MM-dd HH:mm:ss"),
                                   recordNotes: notesController.text,
                                   recordType: recordType.name),
                               record != null ? Crud.update : Crud.create,

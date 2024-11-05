@@ -15,6 +15,11 @@ class LocalData implements LocalDataSource {
   }
 
   @override
+  Future<List<Record>> getRecordsByDate({required String date}) async {
+    return await _dbhelper.getRecordsByDate(date);
+  }
+
+  @override
   Future<int> manageRecord({required Record record, required Crud flag}) async {
     switch (flag) {
       case Crud.create:

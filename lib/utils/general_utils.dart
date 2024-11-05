@@ -4,17 +4,20 @@ import 'package:intl/intl.dart';
 enum Crud { create, read, update, delete }
 
 class GeneralUtils {
-  ///convert string date to MMM dd, yyyy format
-  static String convertDateString({required String input}) {
+  ///convert string date to another string format
+  static String convertDateString(
+      {required String input, required String format}) {
     DateTime dateTime = DateTime.parse(input);
 
-    String formattedDate = DateFormat("MMM dd, yyyy").format(dateTime);
+    String formattedDate = DateFormat(format).format(dateTime);
     return formattedDate;
   }
 
-  ///convert date time now to yyyy-MM-dd HH:mm:ss
-  static String convertDateTime({required DateTime dateTime}) {
-    String formattedDate = DateFormat("yyyy-MM-dd HH:mm:ss").format(dateTime);
+  ///convert date time to string</br>
+  ///samples ["yyyy-MM-dd HH:mm:ss", "MMM yyyy", "MMM dd, yyyy"]
+  static String convertDateTime(
+      {required DateTime dateTime, required String format}) {
+    String formattedDate = DateFormat(format).format(dateTime);
     return formattedDate;
   }
 

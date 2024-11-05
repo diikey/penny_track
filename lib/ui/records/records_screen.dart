@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:penny_track/bloc/records/records_bloc.dart';
-import 'package:penny_track/data/dto/records/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/cubit/datepicker/datepicker_cubit.dart';
 import 'package:penny_track/utils/general_utils.dart';
 import 'package:penny_track/utils/resources/routes_manager.dart';
+import 'package:penny_track/utils/widgets/month_year_dialog.dart';
 
 class RecordsScreen extends StatefulWidget {
   const RecordsScreen({super.key});
@@ -15,49 +16,97 @@ class RecordsScreen extends StatefulWidget {
 class _RecordsScreenState extends State<RecordsScreen> {
   @override
   void initState() {
-    context.read<RecordsBloc>().add(RecordsInitialGetEvent());
+    context.read<RecordsBloc>().add(RecordsInitialGetEvent(
+        GeneralUtils.convertDateTime(
+            dateTime: DateTime.now(), format: "yyyy-MM")));
     super.initState();
   }
 
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.chevron_left),
+    return BlocListener<RecordsBloc, RecordsState>(
+      listener: (context, state) {
+        if (state is RecordsSuccessManage) {
+          context.read<RecordsBloc>().add(RecordsInitialGetEvent(
+              GeneralUtils.convertDateTime(
+                  dateTime: selectedDate, format: "yyyy-MM")));
+        }
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: OutlinedButton(
+              onPressed: () async {
+                // _selectDate(context);
+                final Map<String, int?>? result = await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return BlocProvider(
+                      create: (context) => DatepickerCubit(selectedDate),
+                      child: MonthYearDialog(),
+                    );
+                  },
+                );
+
+                if (!context.mounted || result == null) return;
+                setState(() {
+                  selectedDate = DateTime(
+                      result["selectedYear"]!, result["selectedMonth"]!);
+                });
+                context.read<RecordsBloc>().add(RecordsInitialGetEvent(
+                    "${result["selectedYear"]!}-${result["selectedMonth"]!}"));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(GeneralUtils.convertDateTime(
+                      dateTime: selectedDate, format: "MMMM, yyyy")),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Icon(Icons.calendar_month),
+                  ),
+                ],
               ),
             ),
-            Text("October, 2024"),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.chevron_right),
-              ),
-            ),
-          ],
-        ),
-        BlocBuilder<RecordsBloc, RecordsState>(
-          builder: (context, state) {
-            if (state is RecordsLoadingLocal) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is RecordsSuccessLocal) {
-              if (state.records.isNotEmpty) {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: state.records.length,
-                    itemBuilder: (context, index) {
-                      final Record record = state.records[index];
-                      return ListTile(
+          ),
+          BlocBuilder<RecordsBloc, RecordsState>(
+            builder: (context, state) {
+              if (state is RecordsLoadingLocal) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is RecordsSuccessLocal) {
+                if (state.records.isNotEmpty) {
+                  List<Widget> groupedList = [];
+                  String? currentDay;
+
+                  for (var record in state.records) {
+                    String day = GeneralUtils.convertDateString(
+                        input: record.recordCreatedAt, format: "MMMM d, yyyy");
+
+                    // Add a header if this record's month is different from the last
+                    if (currentDay != day) {
+                      currentDay = day;
+                      groupedList.add(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            day,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    }
+
+                    // Add the record
+                    groupedList.add(
+                      ListTile(
                         onTap: () async {
                           final String? result = await Navigator.pushNamed(
                             context,
@@ -67,9 +116,11 @@ class _RecordsScreenState extends State<RecordsScreen> {
 
                           if (!context.mounted || result == null) return;
                           if (result == "success") {
-                            context
-                                .read<RecordsBloc>()
-                                .add(RecordsInitialGetEvent());
+                            context.read<RecordsBloc>().add(
+                                RecordsInitialGetEvent(
+                                    GeneralUtils.convertDateTime(
+                                        dateTime: selectedDate,
+                                        format: "yyyy-MM")));
                           }
                         },
                         leading: Container(
@@ -89,7 +140,8 @@ class _RecordsScreenState extends State<RecordsScreen> {
                           ),
                         ),
                         title: Text(GeneralUtils.convertDateString(
-                            input: record.recordCreatedAt)),
+                            input: record.recordCreatedAt,
+                            format: "MMM dd, yyyy")),
                         subtitle: Text(
                           record.recordType == "transfer"
                               ? "${record.recordAccount} > ${record.recordAccountTransfer}"
@@ -111,20 +163,26 @@ class _RecordsScreenState extends State<RecordsScreen> {
                                     : Colors.orange,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                );
+                      ),
+                    );
+                  }
+
+                  return Expanded(
+                    child: ListView(
+                      children: groupedList,
+                    ),
+                  );
+                }
               }
-            }
-            return Expanded(
-              child: Center(
-                child: Text("No Records."),
-              ),
-            );
-          },
-        )
-      ],
+              return Expanded(
+                child: Center(
+                  child: Text("No Records."),
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }

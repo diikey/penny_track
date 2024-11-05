@@ -96,7 +96,7 @@ class RecordDetailsScreen extends StatelessWidget {
                   Expanded(
                       child: Text(
                     GeneralUtils.convertDateString(
-                        input: record.recordCreatedAt),
+                        input: record.recordCreatedAt, format: "MMM dd, yyyy"),
                     textAlign: TextAlign.end,
                   )),
                 ],

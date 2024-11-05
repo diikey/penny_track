@@ -149,7 +149,22 @@ class DBHelper {
   // a key-value list of columns.
   Future<List<Record>> getRecords() async {
     Database db = await instance.database;
-    final List<Map<String, dynamic>> result = await db.query(recordsTable);
+    final List<Map<String, dynamic>> result =
+        await db.query(recordsTable, orderBy: "$columnRecordCreatedAt desc");
+
+    //Convert the list of maps into Records
+    return List.generate(
+      result.length,
+      (i) => Record.fromJson(result[i]),
+    );
+  }
+
+  Future<List<Record>> getRecordsByDate(String date) async {
+    Database db = await instance.database;
+    final List<Map<String, dynamic>> result = await db.query(recordsTable,
+        where: "$columnRecordCreatedAt like ?",
+        whereArgs: ["%$date%"],
+        orderBy: "$columnRecordCreatedAt desc");
 
     //Convert the list of maps into Records
     return List.generate(

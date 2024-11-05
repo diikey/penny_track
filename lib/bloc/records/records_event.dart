@@ -8,11 +8,16 @@ sealed class RecordsEvent extends Equatable {
 }
 
 class RecordsInitialGetEvent extends RecordsEvent {
-  const RecordsInitialGetEvent();
+  final String dateQuery;
+  const RecordsInitialGetEvent(this.dateQuery);
 }
 
 class RecordsManageEvent extends RecordsEvent {
   final Record record;
   final Crud flag;
   const RecordsManageEvent(this.record, this.flag);
+}
+
+class RecordsSetManageStateSuccess extends RecordsEvent {
+  const RecordsSetManageStateSuccess();
 }
