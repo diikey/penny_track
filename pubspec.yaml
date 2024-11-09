@@ -43,6 +43,7 @@ dependencies:
   intl:
   path:
   path_provider:
+  shared_preferences: ^2.3.3
   sqflite:
   uuid:
 

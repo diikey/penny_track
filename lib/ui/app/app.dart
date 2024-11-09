@@ -6,6 +6,7 @@ import 'package:penny_track/ui/budgets/budgets_screen.dart';
 import 'package:penny_track/ui/categories/categories_screen.dart';
 import 'package:penny_track/ui/records/records_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penny_track/utils/cache.dart';
 import 'package:penny_track/utils/resources/routes_manager.dart';
 
 class App extends StatefulWidget {
@@ -24,11 +25,27 @@ class _AppState extends State<App> {
     "Accounts",
     "Categories",
   ];
+  late Cache cache;
+
+  @override
+  void initState() {
+    cache = context.read<Cache>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () async {
+            await cache.removeString(key: Cache.cacheToken);
+            if (context.mounted) {
+              Navigator.pushReplacementNamed(context, Routes.loginRoute);
+            }
+          },
+          icon: Icon(Icons.logout),
+        ),
         title: Text(titles[currentIndex]),
         centerTitle: true,
         actions: [
