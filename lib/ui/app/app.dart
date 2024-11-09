@@ -7,6 +7,7 @@ import 'package:penny_track/ui/categories/categories_screen.dart';
 import 'package:penny_track/ui/records/records_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:penny_track/utils/cache.dart';
+import 'package:penny_track/utils/environment.dart';
 import 'package:penny_track/utils/resources/routes_manager.dart';
 
 class App extends StatefulWidget {
@@ -35,6 +36,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    print("CLIENT_ID: ${Environment.clientId}");
+    print("CLIENT_SECRET: ${Environment.clientSecret}");
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
