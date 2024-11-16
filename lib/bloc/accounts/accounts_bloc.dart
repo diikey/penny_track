@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:penny_track/data/dto/accounts/account.dart';
+import 'package:penny_track/data/dto/accounts/auth.dart';
 import 'package:penny_track/data/repositories/accounts/accounts_repository.dart';
 import 'package:penny_track/utils/general_utils.dart';
 
@@ -15,6 +16,8 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     on<AccountsGetEvent>(_onAccountsGetEvent);
     on<AccountsGetCalculatedEvent>(_onAccountsGetCalculatedEvent);
     on<AccountsManageEvent>(_onAccountsManageEvent);
+    on<AccountsAuthCodeEvent>(_onAccountsAuthCodeEvent);
+    on<AccountsAuthTokenEvent>(_onAccountsAuthTokenEvent);
   }
 
   void _onAccountsGetEvent(
@@ -53,6 +56,30 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
       }
     } catch (e) {
       emit(AccountsFailed("failed to manage account"));
+    }
+  }
+
+  void _onAccountsAuthCodeEvent(
+      AccountsAuthCodeEvent event, Emitter<AccountsState> emit) async {
+    emit(AccountsLoading());
+    try {
+      final Auth result = await accountsRepository.getAuthCode();
+      if (result.grant != null && result.authorizationUrl != null) {
+        emit(AccountsSuccessGrant(result));
+      } else {
+        emit(AccountsFailed(result.errorMessage!));
+      }
+    } catch (e) {
+      emit(AccountsFailed("something went wrong"));
+    }
+  }
+
+  void _onAccountsAuthTokenEvent(
+      AccountsAuthTokenEvent event, Emitter<AccountsState> emit) async {
+    try {
+      await accountsRepository.getTokenCode(auth: event.auth);
+    } catch (e) {
+      //
     }
   }
 

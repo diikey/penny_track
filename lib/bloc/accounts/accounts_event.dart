@@ -21,3 +21,13 @@ final class AccountsManageEvent extends AccountsEvent {
 
   const AccountsManageEvent(this.account, this.flag);
 }
+
+final class AccountsAuthCodeEvent extends AccountsEvent {
+  const AccountsAuthCodeEvent();
+}
+
+final class AccountsAuthTokenEvent extends AccountsEvent {
+  final Auth auth;
+
+  const AccountsAuthTokenEvent(this.auth);
+}

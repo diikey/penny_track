@@ -41,11 +41,13 @@ dependencies:
   flutter_bloc:
   http:
   intl:
+  oauth2: ^2.0.3
   path:
   path_provider:
   shared_preferences: ^2.3.3
   sqflite:
   uuid:
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:

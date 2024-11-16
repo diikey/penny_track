@@ -31,3 +31,9 @@ final class AccountsFailed extends AccountsState {
 final class AccountsSuccessManage extends AccountsState {
   const AccountsSuccessManage();
 }
+
+final class AccountsSuccessGrant extends AccountsState {
+  final Auth auth;
+
+  const AccountsSuccessGrant(this.auth);
+}
